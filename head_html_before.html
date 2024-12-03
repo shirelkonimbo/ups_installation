@@ -1,0 +1,659 @@
+<div id="animation_wrapper_{{id}}" class="hidden">
+    <div class="lds-ring"></div>
+    <span></span>
+</div>
+
+<div id="Ups_integration_installation" class="application_wrapper">
+    <div class="application_title_wrapper">
+        <h3 class="application_title">אינטגרציית Ups</h3>
+        {% if var.page_content != '' and var.page_content != blank %}
+        <div class="description">{{var.page_content}}</div>
+        {% endif %}
+    </div>
+
+    <div class="installation_content ">
+        <div class="fields">
+            <div>
+                <label for="integrationUsername">שם משתמש</label>
+                <input type="text" id="integrationUsername" required />
+            </div>
+            
+            <div>
+                <label for="integrationScope">מספר לקוח</label>
+                <input type="text" id="integrationScope" required />
+            </div>
+            
+            <div>
+                <label for="integrationPassword">סיסמא</label>
+                <input type="password" id="integrationPassword" autocomplete="new-password" required />
+                <span class="eye show"></span>
+            </div>
+
+            <div>
+                <label for="autoAutomation">אינטגרציה צריכה לפעול בצורה אוטומטית?</label>
+                <select id="autoAutomation" value="true">
+                    <option value="true" >כן</option>
+                    <option value="false">לא</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="install_button_wrapper">
+            <button id="install_button_Ups_integration" class="install_button" disabled>להתקנה</button>
+        </div>
+    </div>
+    <div class="finished_msg hidden">
+        <p>ההתקנה הסתיימה בהצלחה!</p>
+    </div>
+</div>
+
+<div class="backdrop" id="Ups_integration_success_backdrop"></div>
+<div class="modal" id="Ups_integration_success_modal">
+  <div class="modal-close__x" role="button"></div>
+  <div class="modal-content">
+    <img
+      src="https://d3m9l0v76dty0.cloudfront.net/system/photos/725727/original/6aa0ad71a413a04161c21fdde5e87c7e.gif?1662285314"
+      alt="הותקן בהצלחה"
+    />
+    <h4 class="success-title">ההתקנה הסתיימה בהצלחה!</h4>
+    <p>לחצו <a href="">כאן</a> למעבר לדף ההגדרות</p>
+    <p></p>
+  </div>
+  <button class="primary_button modal-close__btn">סגירה</button>
+</div>
+
+
+<style>
+    #right .box {
+        position: relative;
+    }
+    /* animation */
+    #animation_wrapper_{{id}} {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background: #fff;
+        z-index: 999;
+    }
+    #animation_wrapper_{{id}} .lds-ring {
+        display: block;
+        position: absolute;
+        width: 350px;
+        height: 100px;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: url("https://d3m9l0v76dty0.cloudfront.net/system/photos/714701/original/2ecf29b4778e36c9247aac5632b42571.gif?1658829923") no-repeat center center;
+        background-size: contain;
+    }
+    #animation_wrapper_{{id}} span {
+        display: none;
+        position: absolute;
+        width: 280px;
+        font-weight: bold;
+        text-align: center;
+        height: 30px;
+        line-height: 30px;
+        margin: auto;
+        top: 150px;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        color: #000;
+        font-size: 16px;
+    }
+    /* end animation */
+
+    #Ups_integration_installation *,
+    #Ups_integration_success_modal * {
+        font-family: "almoni-neue";
+    }
+    div#content #right .application_wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 48%;
+        box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+        margin: 0 auto;
+    }
+    .application_wrapper .application_title_wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 10px 0 20px;
+        flex-direction: column;
+    }
+
+    #Ups_integration_installation .application_title_wrapper .application_title {
+        display: flex;
+        border-bottom-color: #fff;
+        font-size: 24px;
+    }
+  
+
+    #content #right .application_wrapper .finished_msg * {
+        font-size: 18px;
+        margin: 0;
+        text-align: center;
+    }
+    .application_wrapper .hybrid_exists_msg a {
+        text-decoration: underline;
+    }
+    #content #right .application_wrapper .hybrid_exists_msg .add_extra_fields {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #909090;
+    }
+    #content #right .application_wrapper .hybrid_exists_msg .add_extra_fields .install_button {
+        width: 100px;
+    }
+
+    .application_wrapper .installation_content .fields {
+        display: flex;
+        row-gap: 15px;
+        flex-direction: column;
+        width: 100%;
+        max-width: 70%;
+        margin: auto;
+    }
+    .application_wrapper .installation_content .fields > div {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        position: relative;
+        align-items: center;
+    }
+    .application_wrapper .installation_content .fields > div > label {
+        flex: 1;
+        font-size: 14px;
+    }
+    #content #right .application_wrapper .installation_content .fields > div > :not(label) {
+        flex: 1;
+        max-width: 50%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+    #content #right .application_wrapper .installation_content .fields > div > input {
+        direction: ltr;
+    }
+    .application_wrapper .installation_content .fields > div span.eye {
+        width: 24px;
+        height: 20px;
+        position: absolute;
+        left: calc(50% - 32px);
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        cursor: pointer;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-image: url(https://konimbo-hybrid-files-production.s3.eu-west-1.amazonaws.com/marketing/installation/media/eye_view.svg)
+    }
+    .application_wrapper .installation_content .fields > div span.eye.show {
+        background-image: url(https://konimbo-hybrid-files-production.s3.eu-west-1.amazonaws.com/marketing/installation/media/eye_hide.svg)
+    }
+
+    .application_wrapper .install_button_wrapper {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        margin: 1rem auto;
+    }
+    #content #right .application_wrapper .install_button {
+        display: flex;
+        background: linear-gradient(315deg, #70a414 -0.12%, #aed667 99.88%);
+        border: none;
+        border-radius: 32px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 23px;
+        font-weight: 700;
+        height: 42px;
+        width: 199px;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    #content #right .application_wrapper .install_button:hover {
+        background: linear-gradient(315deg, #4d7800 -0.12%, #9ad03b 99.88%);
+    }
+    #content #right .application_wrapper .install_button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* popup */
+    #Ups_integration_success_backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: 1;
+    }
+    #Ups_integration_success_modal {
+        display: none;
+        width: 548px;
+        height: 284px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        z-index: 2;
+    }
+    #Ups_integration_success_modal .modal-close__x {
+        display: block;
+        width: 17px;
+        height: 17px;
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        border: none;
+        background: url("https://d3m9l0v76dty0.cloudfront.net/system/photos/725726/original/31f2820bfebdf35f42f38d013b7f01e0.svg?1662285262")
+        no-repeat center center;
+        cursor: pointer;
+    }
+    #Ups_integration_success_modal .modal-content {
+        margin-bottom: 25px;
+    }
+    #Ups_integration_success_modal .modal-content img {
+        width: 132px;
+        max-width: 100%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    #right #Ups_integration_success_modal .success-title {
+        font-weight: 700;
+        font-size: 20px;
+        color: #000;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+    #right #Ups_integration_success_modal p {
+        font-size: 18px;
+    }
+    #Ups_integration_success_modal .primary_button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        width: 84px;
+        height: 40px;
+        background: linear-gradient(315deg, #70a414 -0.12%, #aed667 99.88%);
+        border-radius: 36px;
+        border: none;
+        font-weight: 700;
+        font-size: 20px;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+
+
+// toggle button
+$('.application_wrapper .installation_content .fields > div > input').keyup(toggleInstallationBtn);
+
+
+// toggle password field
+$('.application_wrapper .installation_content .fields > div span.eye').click(function(){
+    $(this).toggleClass('show');
+    if ($(this).hasClass('show')) {
+        $(this).siblings('input')[0].type = 'password';
+    } else {
+        $(this).siblings('input')[0].type = 'text';
+    }
+});
+
+
+// install
+$('.application_wrapper .install_button_wrapper .install_button').click(installUpsIntegrationPart1);
+
+
+// handle modal
+$("#Ups_integration_success_modal .modal-close__x, #Ups_integration_success_modal .primary_button, #Ups_integration_success_backdrop").click(function () {
+    $("#Ups_integration_success_backdrop, #Ups_integration_success_modal").hide();
+});
+
+
+
+
+async function toggleInstallationBtn() {
+    try {
+        let isValid = true;
+        $('.application_wrapper .installation_content .fields > div > input').each(function(){
+            if ($(this).val().trim() == '') {
+                isValid = false;
+                return false;
+            }
+        });
+        $('.application_wrapper .install_button_wrapper .install_button').attr('disabled', !isValid);
+    } catch (error) {
+        console.error("Function toggleInstallationBtn error: " + error);
+    }
+}
+
+
+async function installUpsIntegrationPart1() {
+    try {
+        $('#animation_wrapper_{{id}}').show();
+        let apiUsers = await automatedOnboarding();
+        let v1Token = apiUsers[0].token;
+        let v1TokenWebhook = apiUsers[1] ? apiUsers[1] : 0;
+        hybrid1Id_{{id}} = (await getHybridVars("ups_admin")).id;
+
+        // עדכון ראשון של hybrid1
+        let updateHybrid1Result = await updateHybrid1(v1Token); 
+        if (updateHybrid1Result) {
+            // שמור את ה-hybrid1 אחרי עדכון ראשון
+            await resaveHybrid(); // שמור את המידע של העדכון הראשון
+        }
+
+        // עדכון שני של hybrid2
+        let updateHybrid2Result = await updateHybrid2(v1Token,v1TokenWebhook); 
+        if (updateHybrid2Result) {
+            // שמור את ה-hybrid2 אחרי עדכון שני
+            await resaveHybrid(); // שמור את המידע של העדכון השני
+        }
+
+        // הצגת הודעת הצלחה אחרי ששני העדכונים הושלמו
+        $('#animation_wrapper_{{id}}').hide();
+        $('.finished_msg').removeClass('hidden').addClass('show');
+        $('#animation_wrapper_{{id}}').hide();
+        $('.installation_content').removeClass('show').addClass('hidden');
+        showSuccessModal(`/admin/user_files/${hybrid1Id_{{id}}}/edit`);
+
+    } catch (error) {
+        console.error("Function installUpsIntegrationPart1 error: " + error);
+        $('#animation_wrapper_{{id}}').hide();
+        alert(error);
+    }
+}
+
+async function resaveHybrid() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const elementsPageRes = await (await fetch(`/admin/user_files/${hybrid1Id_{{id}}}/edit`)).text();
+
+            let obj = {};
+            const $form = $(elementsPageRes).find("form.edit_user_file");
+            $form.find('*[name]:not([name=""]):not([name="authenticity_token"])').each(function(){
+                let name = $(this).attr('name');
+                let value = $(this).val();
+                obj[name] = value;
+            });
+            const authenticityToken = $form.find('[name="authenticity_token"]').val();
+
+            $.ajax({
+                type: "POST",
+                url: `/admin/user_files/${hybrid1Id_{{id}}}?authenticity_token=${authenticityToken}`,
+                data: obj,
+                success: function (response) {
+                    resolve(response);
+                },
+                error: function (xhr, status, error) {
+                    reject(error);
+                }
+            });
+        } catch (error) {
+            console.error("Function resaveHybrid error: " + error);
+            reject(error);
+        }
+    });
+}
+
+
+async function getHybridVars(hybridToken) {
+    try {
+        var hybridResponse = await fetch(`/admin/user_files/fetch?token=${hybridToken}`);
+        var hybridResponseJson = await hybridResponse.json();
+        if (hybridResponseJson.error) {
+            return null;
+        }
+        return hybridResponseJson;
+    } catch (error) {
+        console.error("Function getHybridVars error: " + error);
+        return null;
+    }
+}
+
+
+
+
+
+
+async function automatedOnboarding() {
+    try {
+        let dataObj = {
+    store_from_subdomain: "upskapi",
+    user_files_tokens: "ups_admin,ups_main",
+    user_files_titles: "",
+    webhooks_titles: "",
+    structure_layout_titles: "Order,Item",
+    store_seo_names_disabled: "can_hfd_shipping"
+};
+
+if ($("#autoAutomation").val() === "true") {
+    dataObj.api_user_names = "ups_api_orders,ups_webhooks";
+    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings,can_triggers";
+} else {
+    dataObj.api_user_names = "ups_api_orders";
+    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings";
+
+}
+        
+        let dataJson = JSON.stringify(dataObj);
+        debugger
+        let getHybridsRes = await (
+            await fetch("/admin/automate_apis", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: dataJson,
+            })
+        ).json();
+        console.log(getHybridsRes);
+        return getHybridsRes.api_user_names_created;
+    } catch (error) {
+        console.error("Function automatedOnboarding error: " + error);
+        return null;
+    }  
+}
+
+async function createWebhook(v1TokenWebhook,upsSettingsJson) {
+    try {
+        debugger
+        const parts = upsSettingsJson.split("/");
+        const subdomain = parts[5];
+        const hybridToken = parts[6];
+        const hybridNum = parts[8]
+
+        const webhookTitle = "ups_webhook";
+        const webhookEvent = "order_created";
+        url = "https://konimbo.ship.co.il/?type=webhook_send_to_ups&subdomain="+subdomain+"&hybridToken="+hybridToken+"&hybridNum="+hybridNum;
+
+        let createWebhookObj = {
+            "token": "m6cDgicc6cSbM2OzOXUmQE7WuzqWkw3a3o7UpiSA",
+            "v1Token": v1TokenWebhook.token,
+            "eventName": "order_created",
+            "callbackUrl": url,
+            "dataRecord": {
+                "callback_url": ""
+            }
+        }
+        let dataJson = JSON.stringify(createWebhookObj);
+
+        let createWebhookRes = await (
+            await fetch("https://3jiaelpnci.execute-api.eu-west-1.amazonaws.com/production/createWebhook", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: dataJson,
+            })
+        ).json();
+        debugger
+    } catch (error) {
+        console.error("Function createWebhook error: " + error);
+    }  
+}
+
+
+
+
+
+async function updateHybrid1(v1Token) {
+    try {
+        const hybrid1Vars = await getHybridVars("ups_admin");
+
+        const integrationUsername = $("#integrationUsername").val();
+        const integrationPassword = $("#integrationPassword").val();
+        const integrationScope = $("#integrationScope").val();
+        let dataObj = {
+            "user_file[vars][upsKonimboToken]": v1Token,
+            "user_file[vars][upsIntegrationUsername]": integrationUsername,
+            "user_file[vars][upsIntegrationPassword]": integrationPassword,
+            "user_file[vars][upsIntegrationScope]": integrationScope
+        };
+        
+        const updateHybridPromise = await updateHybrid(hybrid1Id_{{id}}, "ups_admin", dataObj); 
+        return updateHybridPromise;  // מחזירים את התוצאה כדי שנדע אם העדכון עבר בהצלחה
+    } catch (error) {
+        console.error("Function updateHybrid1 error: " + error);
+        throw error;  // מוודאים שמטפלים בשגיאה
+    }
+}
+
+async function updateHybrid2(v1Token,v1TokenWebhook) {
+    try {
+        const hybrid1Vars = await getHybridVars("ups_admin");
+        const upsSettingsJson = hybrid1Vars.vars.upsSettingsJson;
+        const integrationUsername = $("#integrationUsername").val();
+        const integrationPassword = $("#integrationPassword").val();
+        const integrationScope = $("#integrationScope").val();
+        let dataObj = {
+            "user_file[vars][upsSettingsJsonUrl]": upsSettingsJson,
+            "user_file[vars][upsKonimboToken]": v1Token,
+            "user_file[vars][upsIntegrationUsername]": integrationUsername,
+            "user_file[vars][upsIntegrationPassword]": integrationPassword,
+            "user_file[vars][upsIntegrationScope]": integrationScope,
+            "user_file[vars][upsEnableIntegration]": "true",
+            
+        };
+
+        if($("#autoAutomation").val()=="true"){
+            createWebhook(v1TokenWebhook,upsSettingsJson);
+            debugger
+            dataObj["user_file[vars][upsIntegrationMethod]"] = "automatic";
+
+        }
+        const updateHybridPromise = await updateHybrid(hybrid1Id_{{id}}, "ups_admin", dataObj);
+        return updateHybridPromise;  // מחזירים את התוצאה כדי שנדע אם העדכון עבר בהצלחה
+    } catch (error) {
+        console.error("Function updateHybrid2 error: " + error);
+        throw error;  // מוודאים שמטפלים בשגיאה
+    }
+}
+
+// function updateLambdaUrl(hybridVars) {
+//     try {
+//         let detailsToken = hybridVars.vars.details.split('{{subdomain}}/')[1].split('/')[0];
+//         lambdaFullUrl_{{id}} += `&UpsHybridId=${hybridVars.id}&detailsToken=${detailsToken}`;
+//     } catch (error) {
+//         console.error("Function updateLambdaUrl error: " + error);
+//     }
+// }
+
+
+
+async function updateHybrid(hybridId, hybridToken, hybridData) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let updateHybridData = {
+                ...hybridData,
+                _method: "put",
+                name_token: hybridToken,
+                admin_public: "true"
+            };
+            debugger
+            console.log(updateHybridData)
+            
+            $.ajax({
+                type: "POST",
+                url: "https://secure.konimbo.co.il/admin/user_files/" + hybridId,
+                data: updateHybridData,
+                success: function (data) {
+                    console.log("updateHybrid: success!");
+                    resolve(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log("updateHybrid: failed!");
+                    reject(error);
+                }
+            });
+        } catch (error) {
+            console.error("Function updateHybrid error: " + error);
+            reject(error);
+        }
+    });
+}
+
+function showSuccessModal(link) {
+    try {
+        $('#Ups_integration_success_modal .modal-content a').attr('href', link);
+        $("#Ups_integration_success_backdrop, #Ups_integration_success_modal").show();
+    } catch (error) {
+        console.error("Function showSuccessModal: " + error);
+    }
+}
+
+
+// async function addExtraFields() {
+//     try {
+//         $('#animation_wrapper_{{id}}').show();
+        
+//         let dataObj = {
+//             store_from_subdomain: "Upskapi",
+//             user_files_tokens: "Ups_integration_settings3",
+//             structure_layout_titles: "Order"
+//         };
+        
+//         let dataJson = JSON.stringify(dataObj);
+        
+//         let getHybridsRes = await (
+//             await fetch("/admin/automate_apis", {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json",
+//                 },
+//                 body: dataJson,
+//             })
+//         ).json();
+        
+//         let hybridId = (await getHybridVars("Ups_integration_settings3")).id;
+//         $('.application_wrapper .hybrid_exists_msg .add_extra_fields').removeClass('show').addClass('hidden');
+//         $('#animation_wrapper_{{id}}').hide();
+//         showSuccessModal(`/admin/user_files/${hybridId}/edit`);
+//     } catch (error) {
+//         console.error("Function addExtraFields error: " + error);
+//     }  
+// }
+</script>

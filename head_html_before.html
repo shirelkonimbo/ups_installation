@@ -6,8 +6,8 @@
 <div id="Ups_integration_installation" class="application_wrapper">
     <div class="application_title_wrapper">
         <h3 class="application_title">אינטגרציית Ups</h3>
-        {% if var.page_content != '' and var.page_content != blank %}
-        <div class="description">{{var.page_content}}</div>
+        {% if const.page_content != '' and const.page_content != blank %}
+        <div class="description">{{const.page_content}}</div>
         {% endif %}
     </div>
 
@@ -61,7 +61,6 @@
   </div>
   <button class="primary_button modal-close__btn">סגירה</button>
 </div>
-
 
 <style>
     #right .box {
@@ -307,12 +306,9 @@
 
 <script>
 
-
-// toggle button
 $('.application_wrapper .installation_content .fields > div > input').keyup(toggleInstallationBtn);
 
 
-// toggle password field
 $('.application_wrapper .installation_content .fields > div span.eye').click(function(){
     $(this).toggleClass('show');
     if ($(this).hasClass('show')) {
@@ -323,17 +319,12 @@ $('.application_wrapper .installation_content .fields > div span.eye').click(fun
 });
 
 
-// install
 $('.application_wrapper .install_button_wrapper .install_button').click(installUpsIntegrationPart1);
 
 
-// handle modal
 $("#Ups_integration_success_modal .modal-close__x, #Ups_integration_success_modal .primary_button, #Ups_integration_success_backdrop").click(function () {
     $("#Ups_integration_success_backdrop, #Ups_integration_success_modal").hide();
 });
-
-
-
 
 async function toggleInstallationBtn() {
     try {
@@ -350,6 +341,43 @@ async function toggleInstallationBtn() {
     }
 }
 
+async function automatedOnboarding() {
+    try {
+        let dataObj = {
+    store_from_subdomain: "upskapi",
+    user_files_tokens: "ups_admin,ups_main",
+    user_files_titles: "",
+    webhooks_titles: "",
+    structure_layout_titles: "Order,Item",
+    store_seo_names_disabled: "can_hfd_shipping"
+};
+
+if ($("#autoAutomation").val() === "true") {
+    dataObj.api_user_names = "ups_api_orders,ups_webhooks";
+    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings,can_triggers";
+} else {
+    dataObj.api_user_names = "ups_api_orders";
+    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings";
+
+}
+        
+        let dataJson = JSON.stringify(dataObj);
+        let getHybridsRes = await (
+            await fetch("/admin/automate_apis", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: dataJson,
+            })
+        ).json();
+        console.log(getHybridsRes);
+        return getHybridsRes.api_user_names_created;
+    } catch (error) {
+        console.error("Function automatedOnboarding error: " + error);
+        return null;
+    }  
+}
 
 async function installUpsIntegrationPart1() {
     try {
@@ -359,21 +387,16 @@ async function installUpsIntegrationPart1() {
         let v1TokenWebhook = apiUsers[1] ? apiUsers[1] : 0;
         hybrid1Id_{{id}} = (await getHybridVars("ups_admin")).id;
 
-        // עדכון ראשון של hybrid1
         let updateHybrid1Result = await updateHybrid1(v1Token); 
         if (updateHybrid1Result) {
-            // שמור את ה-hybrid1 אחרי עדכון ראשון
-            await resaveHybrid(); // שמור את המידע של העדכון הראשון
+            await resaveHybrid(); 
         }
 
-        // עדכון שני של hybrid2
         let updateHybrid2Result = await updateHybrid2(v1Token,v1TokenWebhook); 
         if (updateHybrid2Result) {
-            // שמור את ה-hybrid2 אחרי עדכון שני
-            await resaveHybrid(); // שמור את המידע של העדכון השני
+            await resaveHybrid(); 
         }
 
-        // הצגת הודעת הצלחה אחרי ששני העדכונים הושלמו
         $('#animation_wrapper_{{id}}').hide();
         $('.finished_msg').removeClass('hidden').addClass('show');
         $('#animation_wrapper_{{id}}').hide();
@@ -419,11 +442,10 @@ async function resaveHybrid() {
     });
 }
 
-
 async function getHybridVars(hybridToken) {
     try {
-        var hybridResponse = await fetch(`/admin/user_files/fetch?token=${hybridToken}`);
-        var hybridResponseJson = await hybridResponse.json();
+        const hybridResponse = await fetch(`/admin/user_files/fetch?token=${hybridToken}`);
+        const hybridResponseJson = await hybridResponse.json();
         if (hybridResponseJson.error) {
             return null;
         }
@@ -434,53 +456,8 @@ async function getHybridVars(hybridToken) {
     }
 }
 
-
-
-
-
-
-async function automatedOnboarding() {
-    try {
-        let dataObj = {
-    store_from_subdomain: "upskapi",
-    user_files_tokens: "ups_admin,ups_main",
-    user_files_titles: "",
-    webhooks_titles: "",
-    structure_layout_titles: "Order,Item",
-    store_seo_names_disabled: "can_hfd_shipping"
-};
-
-if ($("#autoAutomation").val() === "true") {
-    dataObj.api_user_names = "ups_api_orders,ups_webhooks";
-    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings,can_triggers";
-} else {
-    dataObj.api_user_names = "ups_api_orders";
-    dataObj.store_seo_names = "can_order_long_form,can_api,can_shippings_json,cart_shippings";
-
-}
-        
-        let dataJson = JSON.stringify(dataObj);
-        debugger
-        let getHybridsRes = await (
-            await fetch("/admin/automate_apis", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: dataJson,
-            })
-        ).json();
-        console.log(getHybridsRes);
-        return getHybridsRes.api_user_names_created;
-    } catch (error) {
-        console.error("Function automatedOnboarding error: " + error);
-        return null;
-    }  
-}
-
 async function createWebhook(v1TokenWebhook,upsSettingsJson) {
     try {
-        debugger
         const parts = upsSettingsJson.split("/");
         const subdomain = parts[5];
         const hybridToken = parts[6];
@@ -510,15 +487,10 @@ async function createWebhook(v1TokenWebhook,upsSettingsJson) {
                 body: dataJson,
             })
         ).json();
-        debugger
     } catch (error) {
         console.error("Function createWebhook error: " + error);
     }  
 }
-
-
-
-
 
 async function updateHybrid1(v1Token) {
     try {
@@ -528,61 +500,49 @@ async function updateHybrid1(v1Token) {
         const integrationPassword = $("#integrationPassword").val();
         const integrationScope = $("#integrationScope").val();
         let dataObj = {
-            "user_file[vars][upsKonimboToken]": v1Token,
-            "user_file[vars][upsIntegrationUsername]": integrationUsername,
-            "user_file[vars][upsIntegrationPassword]": integrationPassword,
-            "user_file[vars][upsIntegrationScope]": integrationScope
+            "user_file[consts][upsKonimboToken]": v1Token,
+            "user_file[consts][upsIntegrationUsername]": integrationUsername,
+            "user_file[consts][upsIntegrationPassword]": integrationPassword,
+            "user_file[consts][upsIntegrationScope]": integrationScope
         };
         
         const updateHybridPromise = await updateHybrid(hybrid1Id_{{id}}, "ups_admin", dataObj); 
-        return updateHybridPromise;  // מחזירים את התוצאה כדי שנדע אם העדכון עבר בהצלחה
+        return updateHybridPromise;  
     } catch (error) {
         console.error("Function updateHybrid1 error: " + error);
-        throw error;  // מוודאים שמטפלים בשגיאה
+        throw error;  
     }
 }
 
 async function updateHybrid2(v1Token,v1TokenWebhook) {
     try {
         const hybrid1Vars = await getHybridVars("ups_admin");
-        const upsSettingsJson = hybrid1Vars.vars.upsSettingsJson;
+        const upsSettingsJson = hybrid1Vars.consts.upsSettingsJson;
         const integrationUsername = $("#integrationUsername").val();
         const integrationPassword = $("#integrationPassword").val();
         const integrationScope = $("#integrationScope").val();
         let dataObj = {
-            "user_file[vars][upsSettingsJsonUrl]": upsSettingsJson,
-            "user_file[vars][upsKonimboToken]": v1Token,
-            "user_file[vars][upsIntegrationUsername]": integrationUsername,
-            "user_file[vars][upsIntegrationPassword]": integrationPassword,
-            "user_file[vars][upsIntegrationScope]": integrationScope,
-            "user_file[vars][upsEnableIntegration]": "true",
+            "user_file[consts][upsSettingsJsonUrl]": upsSettingsJson,
+            "user_file[consts][upsKonimboToken]": v1Token,
+            "user_file[consts][upsIntegrationUsername]": integrationUsername,
+            "user_file[consts][upsIntegrationPassword]": integrationPassword,
+            "user_file[consts][upsIntegrationScope]": integrationScope,
+            "user_file[consts][upsEnableIntegration]": "true",
             
         };
 
         if($("#autoAutomation").val()=="true"){
             createWebhook(v1TokenWebhook,upsSettingsJson);
-            debugger
-            dataObj["user_file[vars][upsIntegrationMethod]"] = "automatic";
+            dataObj["user_file[consts][upsIntegrationMethod]"] = "automatic";
 
         }
         const updateHybridPromise = await updateHybrid(hybrid1Id_{{id}}, "ups_admin", dataObj);
-        return updateHybridPromise;  // מחזירים את התוצאה כדי שנדע אם העדכון עבר בהצלחה
+        return updateHybridPromise;  
     } catch (error) {
         console.error("Function updateHybrid2 error: " + error);
-        throw error;  // מוודאים שמטפלים בשגיאה
+        throw error;  
     }
 }
-
-// function updateLambdaUrl(hybridVars) {
-//     try {
-//         let detailsToken = hybridVars.vars.details.split('{{subdomain}}/')[1].split('/')[0];
-//         lambdaFullUrl_{{id}} += `&UpsHybridId=${hybridVars.id}&detailsToken=${detailsToken}`;
-//     } catch (error) {
-//         console.error("Function updateLambdaUrl error: " + error);
-//     }
-// }
-
-
 
 async function updateHybrid(hybridId, hybridToken, hybridData) {
     return new Promise(async (resolve, reject) => {
@@ -593,7 +553,6 @@ async function updateHybrid(hybridId, hybridToken, hybridData) {
                 name_token: hybridToken,
                 admin_public: "true"
             };
-            debugger
             console.log(updateHybridData)
             
             $.ajax({
@@ -625,35 +584,4 @@ function showSuccessModal(link) {
     }
 }
 
-
-// async function addExtraFields() {
-//     try {
-//         $('#animation_wrapper_{{id}}').show();
-        
-//         let dataObj = {
-//             store_from_subdomain: "Upskapi",
-//             user_files_tokens: "Ups_integration_settings3",
-//             structure_layout_titles: "Order"
-//         };
-        
-//         let dataJson = JSON.stringify(dataObj);
-        
-//         let getHybridsRes = await (
-//             await fetch("/admin/automate_apis", {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json",
-//                 },
-//                 body: dataJson,
-//             })
-//         ).json();
-        
-//         let hybridId = (await getHybridVars("Ups_integration_settings3")).id;
-//         $('.application_wrapper .hybrid_exists_msg .add_extra_fields').removeClass('show').addClass('hidden');
-//         $('#animation_wrapper_{{id}}').hide();
-//         showSuccessModal(`/admin/user_files/${hybridId}/edit`);
-//     } catch (error) {
-//         console.error("Function addExtraFields error: " + error);
-//     }  
-// }
 </script>
